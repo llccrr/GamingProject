@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     }
     // Update is called once per frame
     //Boucle de jeu
-    public void FixedUpdate()
+	protected void FixedUpdate()
     {
         body.MovePosition(body.position + velocity * Time.fixedDeltaTime);
     }

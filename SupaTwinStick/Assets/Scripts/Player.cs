@@ -2,16 +2,20 @@
 using System.Collections;
 
 [RequireComponent(typeof(PlayerController))]
-public class Player : MonoBehaviour {
+[RequireComponent(typeof(GunController))]
+public class Player : Killable {
 
     public float moveSpeed = 5;
 
     PlayerController myPlayerController;
     Camera viewCamera;
+	GunController gunController;
 
     // Use this for initialization    
-    void Start () {
+	protected override void Start () {
+		base.Start ();
         myPlayerController = GetComponent<PlayerController>();
+		gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
     }
 	
@@ -33,5 +37,10 @@ public class Player : MonoBehaviour {
             Vector3 point = ray.GetPoint(rayDistance);
             myPlayerController.LookAt(point);
         }
+
+		/* Manage the weaponing and shooting system*/
+		if (Input.GetMouseButton (0)) {
+			gunController.Shoot ();
+		}
     }
 }
