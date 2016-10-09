@@ -4,22 +4,26 @@ using System.Collections;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Opponent : Killable {
 
-    public enum State {Idle, Chasing, Attacking};
+    public enum State {Freezing, Chasing, Attacking};
     State currentState;
 
 	NavMeshAgent navSys;
 	Transform destination;
+    Killable target;
     Material playerSkin;
 
     Color originalOpponentColour;
 
     float attackDistance = .5f;
     float attackRate = 1;
+    float damageShell = 1;
 
     float timeUntilNextAttack;
 
     float playerCollisionRadius;
     float opponentCollisionRadius;
+
+    bool hasDestination;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -28,28 +32,44 @@ public class Opponent : Killable {
         playerSkin = GetComponent<Renderer>().material;
         originalOpponentColour = playerSkin.color;
 
-        currentState = State.Chasing;
-        destination = GameObject.FindGameObjectWithTag("Player").transform;
+        if(GameObject.FindGameObjectWithTag("Player").transform != null)
+        {
+            hasDestination = true;
+            currentState = State.Chasing;
+            destination = GameObject.FindGameObjectWithTag("Player").transform;
+            target = destination.GetComponent<Killable>();
+            target.OnKilled += OnTargetDeath;
 
-        playerCollisionRadius = destination.GetComponent<CapsuleCollider>().radius;
-        opponentCollisionRadius = GetComponent<CapsuleCollider>().radius; 
-        StartCoroutine(UpdatePathfinding());
+            playerCollisionRadius = destination.GetComponent<CapsuleCollider>().radius;
+            opponentCollisionRadius = GetComponent<CapsuleCollider>().radius;
+            StartCoroutine(UpdatePathfinding());
+        }
 
 
+    }
+
+    void OnTargetDeath()
+    {
+        hasDestination = false;
+        currentState = State.Freezing;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if(Time.time > timeUntilNextAttack)
+        if(hasDestination)
         {
-            //Dont use vector3.Distance cause using too much ressource for thing we dont necerraly need
-            float sqrDistance = (destination.position - transform.position).sqrMagnitude;
-            if (sqrDistance < Mathf.Pow(attackDistance + playerCollisionRadius + opponentCollisionRadius, 2))
+            if (Time.time > timeUntilNextAttack)
             {
-                timeUntilNextAttack = Time.time + attackRate;
-                StartCoroutine(Attack());
+                //Dont use vector3.Distance cause using too much ressource for thing we dont necerraly need
+                float sqrDistance = (destination.position - transform.position).sqrMagnitude;
+                if (sqrDistance < Mathf.Pow(attackDistance + playerCollisionRadius + opponentCollisionRadius, 2))
+                {
+                    timeUntilNextAttack = Time.time + attackRate;
+                    StartCoroutine(Attack());
+                }
             }
         }
+        
     
 	}
     IEnumerator Attack()
@@ -61,15 +81,17 @@ public class Opponent : Killable {
         Vector3 rayToMove = (destination.position - transform.position).normalized;
         Vector3 attackPosition = destination.position - rayToMove * (playerCollisionRadius);
 
-        
-
-
         float attackSpeed = 3; 
         float LoadingPercentage = 0;
-
+        bool reachedPlayer = false;
         playerSkin.color = Color.red;
         while(LoadingPercentage <= 1)
         {
+            if(LoadingPercentage >= .5f && !reachedPlayer)
+            {
+                reachedPlayer = true;
+                target.TakeDamage(damageShell);
+            }
             LoadingPercentage += Time.deltaTime * attackSpeed;
             float parabolic = (-LoadingPercentage * LoadingPercentage + LoadingPercentage) * 4;
            
@@ -85,7 +107,7 @@ public class Opponent : Killable {
         IEnumerator UpdatePathfinding() {
 		float timingRefresh = 0.3f;
 
-		while (destination != null)
+		while (hasDestination)
         {
             if(currentState == State.Chasing)
             {

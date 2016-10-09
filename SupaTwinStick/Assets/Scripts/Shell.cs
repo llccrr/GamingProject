@@ -7,7 +7,18 @@ public class Shell : MonoBehaviour {
 	float damageShell = 1;
 	float currentSpeed = 10;
 	public LayerMask collisionMask;
+    float autoDestruction = 4;
+    float safetyWidth = .1f;
 
+    void Start()
+    {
+        Destroy(gameObject, autoDestruction);
+        Collider[] initCollisions = Physics.OverlapSphere(transform.position, .1f, collisionMask);
+        if (initCollisions.Length > 0)
+        {
+            OnCollision(initCollisions[0]);
+        }
+    }
 	public void ResetSpeed(float newSpeed){
 		currentSpeed = newSpeed;
 	}
@@ -23,16 +34,26 @@ public class Shell : MonoBehaviour {
 		Ray collisionRay = new Ray (transform.position, transform.forward);
 		RaycastHit collision;
 
-		if(Physics.Raycast(collisionRay, out collision, movePath, collisionMask, QueryTriggerInteraction.Collide)){
+		if(Physics.Raycast(collisionRay, out collision, movePath + safetyWidth, collisionMask, QueryTriggerInteraction.Collide)){
 			OnCollision (collision);
 		}
 	}
 
-	void OnCollision ( RaycastHit collision){
+	void OnCollision (RaycastHit collision){
 		ITakeDamage damagedObject = collision.collider.GetComponent<ITakeDamage> ();
 		if (damagedObject != null) {
 			damagedObject.TakeShell (damageShell, collision);
 		}
 		GameObject.Destroy (gameObject);
 	}
+
+    void OnCollision(Collider c)
+    {
+        ITakeDamage damagedObject = c.GetComponent<ITakeDamage>();
+        if (damagedObject != null)
+        {
+            damagedObject.TakeDamage(damageShell);
+            GameObject.Destroy(gameObject);
+        }
+    }
 }

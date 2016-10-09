@@ -15,13 +15,18 @@ public class Killable : MonoBehaviour, ITakeDamage {
 	}
 
 	public void TakeShell (float damageShell, RaycastHit collision){
-		lifePoints -= damageShell;
-
-		if (!killed && (lifePoints <= 0)) {
-			Die ();
-		}
+        TakeDamage(damageShell);
 	}
 
+    public void TakeDamage(float damageShell)
+    {
+        lifePoints -= damageShell;
+
+        if (!killed && (lifePoints <= 0))
+        {
+            Die();
+        }
+    }
 	protected void Die (){
 		killed = true;
         if(OnKilled != null)
