@@ -11,8 +11,8 @@ public class Opponent : Killable {
 	protected override void Start () {
 		base.Start ();
 		navSys = GetComponent<NavMeshAgent> ();
-		destination = GameObject.FindGameObjectWithTag ("Player").transform;
-		StartCoroutine (UpdatePathfinding());
+		destination = GameObject.FindGameObjectWithTag("Player").transform;
+		StartCoroutine(UpdatePathfinding());
 	}
 	
 	// Update is called once per frame
@@ -24,7 +24,7 @@ public class Opponent : Killable {
 		float timingRefresh = 0.3f;
 
 		while (destination != null){
-			Vector3 destinationPosition = new Vector3( destination.position.x, 0, destination.position.z);
+			Vector3 destinationPosition = new Vector3(destination.position.x, 0, destination.position.z);
 			if (!killed) {
 				navSys.SetDestination (destinationPosition);
 			}

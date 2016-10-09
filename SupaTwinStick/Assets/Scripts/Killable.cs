@@ -8,6 +8,8 @@ public class Killable : MonoBehaviour, ITakeDamage {
 	protected string status;
 	protected bool killed;
 
+    public event System.Action OnKilled;
+
 	protected virtual void Start(){
 		lifePoints = beginningLifePoints;
 	}
@@ -22,6 +24,10 @@ public class Killable : MonoBehaviour, ITakeDamage {
 
 	protected void Die (){
 		killed = true;
+        if(OnKilled != null)
+        {
+            OnKilled();
+        }
 		GameObject.Destroy (gameObject);
 	}
 }
