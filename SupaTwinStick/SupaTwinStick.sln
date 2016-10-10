@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupaTwinStick.CSharp", "SupaTwinStick.CSharp.csproj", "{CA370036-7C3C-A628-B507-0DDCE3A7EF25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupaTwinStick.CSharp.Editor", "SupaTwinStick.CSharp.Editor.csproj", "{157C3334-E2A6-B6A9-B7F5-316C5248226A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{CA370036-7C3C-A628-B507-0DDCE3A7EF25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA370036-7C3C-A628-B507-0DDCE3A7EF25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA370036-7C3C-A628-B507-0DDCE3A7EF25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{157C3334-E2A6-B6A9-B7F5-316C5248226A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{157C3334-E2A6-B6A9-B7F5-316C5248226A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{157C3334-E2A6-B6A9-B7F5-316C5248226A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{157C3334-E2A6-B6A9-B7F5-316C5248226A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
