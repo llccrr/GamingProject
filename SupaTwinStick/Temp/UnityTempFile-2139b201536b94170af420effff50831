@@ -1,11 +1,11 @@
 -debug
 -target:library
 -nowarn:0169
--out:Temp/Assembly-CSharp.dll
--r:"C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll"
--r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
--r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll"
--r:"C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll"
+-out:'Temp/Assembly-CSharp.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEditor.dll'
 -define:UNITY_5_3_OR_NEWER
 -define:UNITY_5_4_OR_NEWER
 -define:UNITY_5_4_1
@@ -61,16 +61,16 @@
 -define:ENABLE_LOCALIZATION
 -define:ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION
 -define:ENABLE_EDITOR_TESTS_RUNNER
--define:UNITY_STANDALONE_WIN
+-define:UNITY_STANDALONE_OSX
 -define:UNITY_STANDALONE
 -define:ENABLE_SUBSTANCE
+-define:ENABLE_GAMECENTER
 -define:ENABLE_TEXTUREID_MAP
 -define:ENABLE_RUNTIME_GI
 -define:ENABLE_MOVIES
 -define:ENABLE_NETWORK
 -define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
 -define:ENABLE_UNITYWEBREQUEST
--define:ENABLE_EVENT_QUEUE
 -define:ENABLE_CLUSTERINPUT
 -define:ENABLE_WEBSOCKET_HOST
 -define:ENABLE_MONO
@@ -80,19 +80,19 @@
 -define:UNITY_ASSERTIONS
 -define:UNITY_EDITOR
 -define:UNITY_EDITOR_64
--define:UNITY_EDITOR_WIN
+-define:UNITY_EDITOR_OSX
 -define:UNITY_TEAM_LICENSE
--define:ENABLE_VSTU
-Assets/Scripts/DisplayFPS.cs
-Assets/Scripts/Gun.cs
-Assets/Scripts/GunController.cs
-Assets/Scripts/ITakeDamage.cs
-Assets/Scripts/Killable.cs
-Assets/Scripts/Opponent.cs
-Assets/Scripts/Player.cs
-Assets/Scripts/PlayerController.cs
-Assets/Scripts/ProceduralMapGenerator.cs
-Assets/Scripts/Shell.cs
-Assets/Scripts/Spawner.cs
--r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Runtime.Serialization.dll"
--r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Xml.Linq.dll"
+'Assets/Scripts/DisplayFPS.cs'
+'Assets/Scripts/Gun.cs'
+'Assets/Scripts/GunController.cs'
+'Assets/Scripts/ITakeDamage.cs'
+'Assets/Scripts/Killable.cs'
+'Assets/Scripts/Opponent.cs'
+'Assets/Scripts/Player.cs'
+'Assets/Scripts/PlayerController.cs'
+'Assets/Scripts/ProceduralMapGenerator.cs'
+'Assets/Scripts/Shell.cs'
+'Assets/Scripts/Spawner.cs'
+'Assets/Scripts/UtilityScript.cs'
+-r:'/Applications/Unity/Unity.app/Contents/Mono/lib/mono/unity/System.Runtime.Serialization.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Mono/lib/mono/unity/System.Xml.Linq.dll'
