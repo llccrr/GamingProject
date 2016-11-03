@@ -8,9 +8,13 @@ public class MapEditor : Editor {
 
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+		ProceduralMapGenerator map = (ProceduralMapGenerator)target;
+		if (DrawDefaultInspector ()) {
+			map.GenerateMap ();
+		}
 
-        ProceduralMapGenerator map = (ProceduralMapGenerator)target;
-        map.GenerateMap();
+		if (GUILayout.Button ("Regénérer la MapEditor")) {
+			map.GenerateMap ();
+		}
     }
 }
