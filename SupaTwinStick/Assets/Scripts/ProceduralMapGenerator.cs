@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class ProceduralMapGenerator : MonoBehaviour {
+public class ProceduralMapGenerator : MonoBehaviour 
+{
 
 	public Map[] maps;
 	public int indexOfMap;
@@ -13,24 +14,33 @@ public class ProceduralMapGenerator : MonoBehaviour {
 	public Transform naveMeshMap;
 	public Transform navMeshMapLimiterPrefab;
 	public Vector2 maxSizeOfMap;
+	[Range(0, 1)]
+	public float tileIntersectionLine;
+	public float sizeOfTile;
 
 	List<Coordinates> tilesCoordinates;
 	Queue<Coordinates> mixedTilesCoordinates;
-
-    [Range(0, 1)]
-    public float tileIntersectionLine;
-
-	public float sizeOfTile;
-
+	Queue<Coordinates> mixedFreeTilesCoordinates;
 	Map currentMap;
+	Transform [,] allMapTiles;
      
     void Start()
     {
-        GenerateMap();
+		//FindObjectOfType<Spawner> ().newLevelTop += newLevelTop;
+		GenerateMap();
     }
+
+	void newLevelTop(int levelNumber)
+	{
+		indexOfMap = levelNumber - 1;
+		//GenerateMap();
+	}
+
+
     public void GenerateMap()
     {
 		currentMap = maps [indexOfMap];
+		allMapTiles = new Transform [currentMap.sizeOfMap.x,currentMap.sizeOfMap.y];
 		GetComponent<BoxCollider> ().size = new Vector3 (currentMap.sizeOfMap.x * sizeOfTile, .04f, currentMap.sizeOfMap.y * sizeOfTile);
 
 		//Génération des coordonées
@@ -65,15 +75,18 @@ public class ProceduralMapGenerator : MonoBehaviour {
                 Transform newTile = (Transform)Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90));
 				newTile.localScale = Vector3.one * (1- tileIntersectionLine) * sizeOfTile;
                 newTile.parent = map;
+				allMapTiles [x, y] = newTile;
             }
         }
 
 		//Génère les obstacles
 		bool[,] allowMapObstacle = new bool[(int)currentMap.sizeOfMap.x, (int)currentMap.sizeOfMap.y];
+		List<Coordinates> freeCoordinates =  new List<Coordinates>(tilesCoordinates);
 		int numbObstacles = (int)(currentMap.obstacleCharge * currentMap.sizeOfMap.x * currentMap.sizeOfMap.y);
 		int numbCurrentObstacles = 0;
 
-		for (int i = 0; i < numbObstacles; i++) {
+		for (int i = 0; i < numbObstacles; i++) 
+		{
 			numbCurrentObstacles += 1;
 			Coordinates randomCoordinates = GetRandomCoordinates ();
 			allowMapObstacle[randomCoordinates.x, randomCoordinates.y] = true ;
@@ -89,12 +102,18 @@ public class ProceduralMapGenerator : MonoBehaviour {
 				float gradiant = randomCoordinates.y / (float)currentMap.sizeOfMap.y;
 				materialOfObstacle.color = Color.Lerp (currentMap.foreGroundColor, currentMap.backGroundColor, gradiant);
 				rendererOfObstacle.sharedMaterial = materialOfObstacle;
+				freeCoordinates.Remove (randomCoordinates);
 			
-			} else {
+			} else 
+			{
 					allowMapObstacle[randomCoordinates.x, randomCoordinates.y] = false ;
 				numbCurrentObstacles -= 1;
+
 			}
 		}
+
+		mixedFreeTilesCoordinates = new Queue<Coordinates> (UtilityScript.MixArray (freeCoordinates.ToArray (), currentMap.seed));
+
 
 		//Créer les limites du pathfinding de la map
 		//Limiteur du NavMesh du coté gauche
@@ -114,7 +133,7 @@ public class ProceduralMapGenerator : MonoBehaviour {
 		mapLimiterDown.parent = map;
 		mapLimiterDown.localScale = new Vector3 (maxSizeOfMap.x , 1, (maxSizeOfMap.y - currentMap.sizeOfMap.y) / 2f) * sizeOfTile;
 
-		naveMeshMap.localScale = new Vector3 (maxSizeOfMap.x, maxSizeOfMap.y * sizeOfTile);
+		naveMeshMap.localScale = new Vector3 (maxSizeOfMap.x * sizeOfTile, maxSizeOfMap.y * sizeOfTile);
     }
 
 	bool IsMapAccessible(bool[,] allowMapObstacle, int numbCurrentObstacles){
@@ -125,7 +144,8 @@ public class ProceduralMapGenerator : MonoBehaviour {
 		//on a déjà une case vide puisque le milieu est vide
 		int safeTileNumber = 1;
 
-		while (coordQueue.Count > 0) {
+		while (coordQueue.Count > 0) 
+		{
 			Coordinates currentTile = coordQueue.Dequeue ();
 
 			//on regarde toute les cases qui entourent la case actuelle
@@ -136,11 +156,14 @@ public class ProceduralMapGenerator : MonoBehaviour {
 					int nextToX = currentTile.x + x;
 					int nextToY = currentTile.y + y;
 					//si on est pas en diagonale
-					if (x == 0 || y == 0) {
+					if (x == 0 || y == 0) 
+					{
 						//si on est pas sur la case centrale et dans la map d'obstacle
-						if (nextToX >= 0 && nextToX < allowMapObstacle.GetLength (0) && nextToY >= 0 && nextToY < allowMapObstacle.GetLength (1)) {
+						if (nextToX >= 0 && nextToX < allowMapObstacle.GetLength (0) && nextToY >= 0 && nextToY < allowMapObstacle.GetLength (1)) 
+						{
 							//si la case est sur un emplacement dont on s'est occupé et que ce n'est pas un obstacle
-							if (!mapChecked [nextToX, nextToY] && !allowMapObstacle [nextToX, nextToY]) {
+							if (!mapChecked [nextToX, nextToY] && !allowMapObstacle [nextToX, nextToY]) 
+							{
 								mapChecked [nextToX, nextToY] = true;
 								//on ajoute les cases adjacentes a la queue des cases
 								coordQueue.Enqueue(new Coordinates(nextToX, nextToY));
@@ -156,33 +179,57 @@ public class ProceduralMapGenerator : MonoBehaviour {
 		return wantedSafeTileNumber == safeTileNumber;
 	}
 
-	Vector3 CoordinatesOnMap(int x, int y){
+	Vector3 CoordinatesOnMap(int x, int y)
+	{
 		return new Vector3(-currentMap.sizeOfMap.x / 2f + 0.5f + x, 0, -currentMap.sizeOfMap.y / 2f + 0.5f + y)* sizeOfTile;
 	}
 
-	public Coordinates GetRandomCoordinates (){
+	//Fonction qui permet de récupérer des coordonnées entières par rapport a une position abolue 
+	public Transform GetTileFromPosition(Vector3 position)
+	{
+		int x = Mathf.RoundToInt (position.x / sizeOfTile + (currentMap.sizeOfMap.x - 1) / 2f);
+		x = Mathf.Clamp (x, 0, allMapTiles.GetLength (0) - 1);
+		int y = Mathf.RoundToInt (position.z / sizeOfTile + (currentMap.sizeOfMap.y - 1) / 2f);
+		y = Mathf.Clamp (y, 0, allMapTiles.GetLength (1) - 1);
+
+		return allMapTiles [x, y];
+	}
+
+	public Coordinates GetRandomCoordinates ()
+	{
 		Coordinates randomCoordinates = mixedTilesCoordinates.Dequeue ();
 		mixedTilesCoordinates.Enqueue (randomCoordinates);
 		return randomCoordinates;
 	}
 
+	public Transform GetRandomFreeCoordinates ()
+	{
+		Coordinates randomCoordinates = mixedFreeTilesCoordinates.Dequeue ();
+		mixedFreeTilesCoordinates.Enqueue (randomCoordinates);
+		return allMapTiles[randomCoordinates.x,randomCoordinates.y];
+	}
+
 	[System.Serializable]
-	public struct Coordinates {
+	public struct Coordinates 
+	{
 		public int x;
 		public int y;
 
-		public Coordinates(int _x, int _y) {
+		public Coordinates(int _x, int _y) 
+		{
 			x = _x;
 			y = _y;
 		}
 
 		//on définit ce qu'est une égalité entre 2 coordonnées
-		public static bool operator ==(Coordinates coordA, Coordinates coordB){
+		public static bool operator ==(Coordinates coordA, Coordinates coordB)
+		{
 			return (coordA.x == coordB.x && coordA.y == coordB.y);
 		}
 
 		//on définit ce qu'est une inégalité entre 2 coordonnées
-		public static bool operator !=(Coordinates coordA, Coordinates coordB){
+		public static bool operator !=(Coordinates coordA, Coordinates coordB)
+		{
 			return !(coordA == coordB);
 		}
 	}
@@ -197,8 +244,10 @@ public class ProceduralMapGenerator : MonoBehaviour {
 		public Color foreGroundColor;
 		public Color backGroundColor;
 
-		public Coordinates middleMap {
-			get{
+		public Coordinates middleMap 
+		{
+			get
+			{
 				return new Coordinates (sizeOfMap.x / 2, sizeOfMap.x / 2);
 			}
 		}
