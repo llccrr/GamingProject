@@ -12,6 +12,7 @@ public class ProceduralMapGenerator : MonoBehaviour
     public Transform tilePrefab;
 	public Transform obstaclePrefab;
 	public Transform naveMeshMap;
+	public GameObject wallPrefab;
 	public Transform navMeshMapLimiterPrefab;
 	public Vector2 maxSizeOfMap;
 	[Range(0, 1)]
@@ -114,6 +115,7 @@ public class ProceduralMapGenerator : MonoBehaviour
 
 		mixedFreeTilesCoordinates = new Queue<Coordinates> (UtilityScript.MixArray (freeCoordinates.ToArray (), currentMap.seed));
 
+
 		FindDeadEnds (freeCoordinates);
 
 		//Créer les limites du pathfinding de la map
@@ -135,6 +137,41 @@ public class ProceduralMapGenerator : MonoBehaviour
 		mapLimiterDown.localScale = new Vector3 (maxSizeOfMap.x , 1, (maxSizeOfMap.y - currentMap.sizeOfMap.y) / 2f) * sizeOfTile;
 
 		naveMeshMap.localScale = new Vector3 (maxSizeOfMap.x * sizeOfTile, maxSizeOfMap.y * sizeOfTile);
+
+		//Génération des 4 walls
+		//Produits en croix pour mur de la taille de la map
+		//Produit en croix pour mur de la taille de la map
+		int longueurMurX = 3 * currentMap.sizeOfMap.x / 15;
+		int longueurMurY = 3 * currentMap.sizeOfMap.y / 15;
+
+		GameObject wallLimit1 = (GameObject)Instantiate(wallPrefab);
+		wallLimit1.transform.parent = map;
+		wallLimit1.transform.localScale = new Vector3(longueurMurY, 1, 1);
+		wallLimit1.transform.position = new Vector3(-currentMap.sizeOfMap.x, 0, 0);
+		wallLimit1.transform.eulerAngles = new Vector3(90.0f, 90.0f, transform.eulerAngles.z);
+
+
+		GameObject wallLimit2 = (GameObject)Instantiate(wallPrefab);
+		wallLimit2.transform.parent = map;
+		wallLimit2.transform.localScale = new Vector3(longueurMurX, 1, 1);
+		wallLimit2.transform.position = new Vector3(0, 0, currentMap.sizeOfMap.y);
+		wallLimit2.transform.eulerAngles = new Vector3(-90.0f, 0, transform.eulerAngles.z);
+
+
+		//Sym de 1
+		GameObject wallLimit3 = (GameObject)Instantiate(wallPrefab);
+		wallLimit3.transform.parent = map;
+		wallLimit3.transform.localScale = new Vector3(longueurMurY, 1, 1);
+		wallLimit3.transform.position = new Vector3(currentMap.sizeOfMap.x, 0, 0);
+		wallLimit3.transform.eulerAngles = new Vector3(90.0f, -90.0f, transform.eulerAngles.z);
+
+		//Sym de 2
+		GameObject wallLimit4 = (GameObject)Instantiate(wallPrefab);
+		wallLimit4.transform.parent = map;
+		wallLimit4.transform.localScale = new Vector3(longueurMurX, 1, 1);
+		wallLimit4.transform.position = new Vector3(0, 0, -currentMap.sizeOfMap.y);
+		wallLimit4.transform.eulerAngles = new Vector3(90.0f, 0, transform.eulerAngles.z);
+
     }
 
 	bool IsMapAccessible(bool[,] allowMapObstacle, int numbCurrentObstacles){
