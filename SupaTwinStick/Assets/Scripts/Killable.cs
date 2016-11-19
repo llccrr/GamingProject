@@ -27,7 +27,7 @@ public class Killable : MonoBehaviour, ITakeDamage {
             Die();
         }
     }
-	protected void Die (){
+	public void Die (){
 		killed = true;
         if(OnKilled != null)
         {

@@ -5,7 +5,7 @@ public class Gun : MonoBehaviour {
 
 	public Transform barrelEnd;
 	public Shell shell;
-	public float fireRate = 100;// en milliseconde
+	public float fireRate;// en milliseconde
 	public float barrelEndVelocity = 35;
 
 	float fireRateLimiter;
@@ -13,7 +13,7 @@ public class Gun : MonoBehaviour {
 	public void Fire(){
 		// on empeche de tirer au de la du firerate inscrit
 		if (Time.time > fireRateLimiter) {
-			fireRateLimiter = Time.time + fireRateLimiter / 1000;
+			fireRateLimiter = Time.time + fireRate / 1000;
 			Shell newShell = Instantiate (shell, barrelEnd.position, barrelEnd.rotation) as Shell;
 			newShell.ResetSpeed (barrelEndVelocity);
 		}

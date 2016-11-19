@@ -18,6 +18,7 @@ public class ProceduralMapGenerator : MonoBehaviour
 	public float tileIntersectionLine;
 	public float sizeOfTile;
 
+	List<Transform> deadEnds;
 	List<Coordinates> tilesCoordinates;
 	Queue<Coordinates> mixedTilesCoordinates;
 	Queue<Coordinates> mixedFreeTilesCoordinates;
@@ -26,14 +27,13 @@ public class ProceduralMapGenerator : MonoBehaviour
      
     void Start()
     {
-		//FindObjectOfType<Spawner> ().newLevelTop += newLevelTop;
-		GenerateMap();
+		FindObjectOfType<Spawner> ().newLevelTop += newLevelTop;
     }
 
 	void newLevelTop(int levelNumber)
 	{
 		indexOfMap = levelNumber - 1;
-		//GenerateMap();
+		GenerateMap();
 	}
 
 
@@ -106,7 +106,7 @@ public class ProceduralMapGenerator : MonoBehaviour
 			
 			} else 
 			{
-					allowMapObstacle[randomCoordinates.x, randomCoordinates.y] = false ;
+				allowMapObstacle[randomCoordinates.x, randomCoordinates.y] = false ;
 				numbCurrentObstacles -= 1;
 
 			}
@@ -114,6 +114,7 @@ public class ProceduralMapGenerator : MonoBehaviour
 
 		mixedFreeTilesCoordinates = new Queue<Coordinates> (UtilityScript.MixArray (freeCoordinates.ToArray (), currentMap.seed));
 
+		FindDeadEnds (freeCoordinates);
 
 		//Créer les limites du pathfinding de la map
 		//Limiteur du NavMesh du coté gauche
@@ -143,11 +144,9 @@ public class ProceduralMapGenerator : MonoBehaviour
 		mapChecked [currentMap.middleMap.x, currentMap.middleMap.y] = true;
 		//on a déjà une case vide puisque le milieu est vide
 		int safeTileNumber = 1;
-
 		while (coordQueue.Count > 0) 
 		{
 			Coordinates currentTile = coordQueue.Dequeue ();
-
 			//on regarde toute les cases qui entourent la case actuelle
 			for(int x = -1; x <= 1; x++)
 			{
@@ -161,12 +160,12 @@ public class ProceduralMapGenerator : MonoBehaviour
 						//si on est pas sur la case centrale et dans la map d'obstacle
 						if (nextToX >= 0 && nextToX < allowMapObstacle.GetLength (0) && nextToY >= 0 && nextToY < allowMapObstacle.GetLength (1)) 
 						{
-							//si la case est sur un emplacement dont on s'est occupé et que ce n'est pas un obstacle
-							if (!mapChecked [nextToX, nextToY] && !allowMapObstacle [nextToX, nextToY]) 
+							//Si ce n'est pas un obstacle et si la case est sur un emplacement dont on ne s'est pas encore occupé
+							if (!allowMapObstacle [nextToX, nextToY] && !mapChecked [nextToX, nextToY]) 
 							{
 								mapChecked [nextToX, nextToY] = true;
 								//on ajoute les cases adjacentes a la queue des cases
-								coordQueue.Enqueue(new Coordinates(nextToX, nextToY));
+								coordQueue.Enqueue (new Coordinates (nextToX, nextToY));
 								safeTileNumber++;
 							}
 						}
@@ -207,6 +206,49 @@ public class ProceduralMapGenerator : MonoBehaviour
 		Coordinates randomCoordinates = mixedFreeTilesCoordinates.Dequeue ();
 		mixedFreeTilesCoordinates.Enqueue (randomCoordinates);
 		return allMapTiles[randomCoordinates.x,randomCoordinates.y];
+	}
+									
+	public void FindDeadEnds(List<Coordinates> freeCoordinates)
+	{
+		deadEnds = new List<Transform>();
+		freeCoordinates.ForEach( delegate( Coordinates freeCoord)
+			{
+				int freeAdjacentCase = 0;
+				for (int x = -1; x <= 1; x++) 
+				{
+					for (int y = -1; y <= 1; y++) 
+					{
+						if (x == 0 || y == 0) 
+						{
+							if(!(x == 0 && y == 0)){
+								int nextToX = freeCoord.x + x;
+								int nextToY = freeCoord.y + y;
+								Coordinates tempCoord = new Coordinates(nextToX, nextToY);
+								if(freeCoordinates.Contains(tempCoord)){
+									freeAdjacentCase += 1;
+								}
+							}
+						}
+					}
+				}
+				if(freeAdjacentCase == 1){
+					deadEnds.Add(allMapTiles[freeCoord.x,freeCoord.y]);
+				}
+		});
+	}
+
+
+	public Transform GetPositionDeadEnd()
+	{
+		int index = Random.Range(0,deadEnds.Count);
+		Transform deadEnd = deadEnds[index];
+		deadEnds.Remove (deadEnd);
+		return deadEnd ;
+	}
+
+	public int GetNumberDeadEnds()
+	{
+		return deadEnds.Count ;
 	}
 
 	[System.Serializable]

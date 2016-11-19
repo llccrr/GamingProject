@@ -6,7 +6,10 @@ public class Spawner : MonoBehaviour
 
     public Level[] levels;
     public Opponent opponent;
+	public Objective objectiveObject;
 	public event System.Action<int> newLevelTop;
+	Transform playerSpawn;
+
 
 	ProceduralMapGenerator currentMap;
 	Killable player;
@@ -17,6 +20,8 @@ public class Spawner : MonoBehaviour
     int OpponentStillAlive;
     int opponentLeftSpawning;
     float nextSpawnTime;
+
+	int objectiveCounter;
 
 	bool playerDead;
 
@@ -39,7 +44,27 @@ public class Spawner : MonoBehaviour
 				StartCoroutine (OpponentSpawn ());
 			}
 		}
+		if (objectiveCounter < 1) {
+			NextLevel ();
+		}
     }
+
+	void PlaceObjectivesOnMap(){
+		int sizeOfDeadEnds = (int) Mathf.Round(currentMap.GetNumberDeadEnds () / 2f);
+		objectiveCounter = sizeOfDeadEnds ;
+		for (int i = -1; i < sizeOfDeadEnds -1 ; i++) 
+		{
+				Transform objectiveSpawn = currentMap.GetPositionDeadEnd ();
+				Objective spawnedObjective = (Objective)Instantiate (objectiveObject, objectiveSpawn.position + Vector3.up, Quaternion.identity);
+				spawnedObjective.OnActivated += ObjectiveCountDown;
+		}
+
+	}
+
+	void ReplacePlayerToDeadEnd(){
+		playerSpawn = currentMap.GetPositionDeadEnd ();
+		playerTransform.position = playerSpawn.position + Vector3.up * 2;
+	}
 
 	IEnumerator OpponentSpawn ()
 	{
@@ -68,7 +93,7 @@ public class Spawner : MonoBehaviour
         OpponentStillAlive--;
         if(OpponentStillAlive == 0)
         {
-            NextLevel();
+            //NextLevel();
         }
     }
 
@@ -81,22 +106,38 @@ public class Spawner : MonoBehaviour
 
     void NextLevel()
     {
+		GameObject[] toReset = GameObject.FindGameObjectsWithTag("Resetable");
+		print (toReset.Length);
+		if (toReset.Length > 0) {
+			foreach (GameObject ob in toReset)
+			{
+				Destroy (ob);
+			}
+		}
+
         currentLevelNumber++;
 
-        if(currentLevelNumber - 1 < levels.Length)
-        {
-            currentLevel = levels[currentLevelNumber - 1];
+		if (currentLevelNumber - 1 < levels.Length) {
+			currentLevel = levels [currentLevelNumber - 1];
 
-            opponentLeftSpawning = currentLevel.opponentNbr;
-            OpponentStillAlive = opponentLeftSpawning;
+			opponentLeftSpawning = currentLevel.opponentNbr;
+			OpponentStillAlive = opponentLeftSpawning;
 
-			if (newLevelTop != null) 
-			{
+			if (newLevelTop != null) {
 				newLevelTop (currentLevelNumber);
 			}
-        }
+			ReplacePlayerToDeadEnd ();
+			PlaceObjectivesOnMap ();
+
+		} else {
+			player.Die();
+		}
      
     }
+
+	void ObjectiveCountDown(){
+		objectiveCounter -= 1;
+	}
 
     [System.Serializable]
     public class Level

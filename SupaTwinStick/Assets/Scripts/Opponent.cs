@@ -104,7 +104,7 @@ public class Opponent : Killable {
         currentState = State.Chasing;
         navSys.enabled = true;
     }
-        IEnumerator UpdatePathfinding() {
+    IEnumerator UpdatePathfinding() {
 		float timingRefresh = 0.3f;
 
 		while (hasDestination)
