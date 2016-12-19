@@ -6,6 +6,7 @@ public class Opponent : Killable {
 
     public enum State {Freezing, Chasing, Attacking};
     State currentState;
+    public ParticleSystem deathEffect;
 
 	NavMeshAgent navSys;
 	Transform destination;
@@ -47,7 +48,14 @@ public class Opponent : Killable {
 
 
     }
-
+    public override void TakeShell(float damageShell, Vector3 shellPoint, Vector3 shellDirection)
+    {
+        if(damageShell>=lifePoints)
+        {
+            Destroy(Instantiate(deathEffect.gameObject, shellPoint, Quaternion.FromToRotation(Vector3.forward, shellDirection)) as GameObject, deathEffect.startLifetime);
+        }
+        base.TakeShell(damageShell, shellPoint, shellDirection);
+    }
     void OnTargetDeath()
     {
         hasDestination = false;

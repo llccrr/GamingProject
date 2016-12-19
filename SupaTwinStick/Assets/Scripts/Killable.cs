@@ -14,11 +14,11 @@ public class Killable : MonoBehaviour, ITakeDamage {
 		lifePoints = beginningLifePoints;
 	}
 
-	public void TakeShell (float damageShell, RaycastHit collision){
+	public virtual void TakeShell (float damageShell, Vector3 shellPoint, Vector3 shellDirection){
         TakeDamage(damageShell);
 	}
 
-    public void TakeDamage(float damageShell)
+    public virtual void TakeDamage(float damageShell)
     {
         lifePoints -= damageShell;
 

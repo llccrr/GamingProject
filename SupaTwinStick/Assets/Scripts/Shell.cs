@@ -16,7 +16,7 @@ public class Shell : MonoBehaviour {
         Collider[] initCollisions = Physics.OverlapSphere(transform.position, .1f, collisionMask);
         if (initCollisions.Length > 0)
         {
-            OnCollision(initCollisions[0]);
+            OnCollision(initCollisions[0], transform.position);
         }
     }
 	public void ResetSpeed(float newSpeed){
@@ -35,24 +35,17 @@ public class Shell : MonoBehaviour {
 		RaycastHit collision;
 
 		if(Physics.Raycast(collisionRay, out collision, movePath + safetyWidth, collisionMask, QueryTriggerInteraction.Collide)){
-			OnCollision (collision);
+			OnCollision (collision.collider, collision.point);
 		}
 	}
 
-	void OnCollision (RaycastHit collision){
-		ITakeDamage damagedObject = collision.collider.GetComponent<ITakeDamage> ();
-		if (damagedObject != null) {
-			damagedObject.TakeShell (damageShell, collision);
-		}
-		GameObject.Destroy (gameObject);
-	}
 
-    void OnCollision(Collider c)
+    void OnCollision(Collider c, Vector3 shellPoint)
     {
         ITakeDamage damagedObject = c.GetComponent<ITakeDamage>();
         if (damagedObject != null)
         {
-            damagedObject.TakeDamage(damageShell);
+            damagedObject.TakeShell(damageShell, shellPoint, transform.forward);
             GameObject.Destroy(gameObject);
         }
     }
