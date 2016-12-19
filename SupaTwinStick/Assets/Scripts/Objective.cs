@@ -5,6 +5,7 @@ public class Objective : MonoBehaviour {
 
 	public LayerMask collisionMask;
 	public Material activeSkin;
+	public Light objectiveLight ;
 	Material objectiveSkin;
 	public event System.Action OnActivated;
 	bool activated = false;
@@ -35,5 +36,7 @@ public class Objective : MonoBehaviour {
 
 	public void Activation (){
 		GetComponent<Renderer>().material = activeSkin ;
+		objectiveLight.color = activeSkin.color ;
+		objectiveLight.range += 10;
 	}
 }

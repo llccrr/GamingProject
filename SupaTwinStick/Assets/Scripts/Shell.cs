@@ -46,7 +46,7 @@ public class Shell : MonoBehaviour {
         if (damagedObject != null)
         {
             damagedObject.TakeShell(damageShell, shellPoint, transform.forward);
-            GameObject.Destroy(gameObject);
         }
+		GameObject.Destroy(gameObject);
     }
 }
