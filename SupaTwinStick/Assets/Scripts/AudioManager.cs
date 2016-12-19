@@ -41,7 +41,11 @@ public class AudioManager : MonoBehaviour
                 newMusicSource.transform.parent = transform;
             }
             audioListener = FindObjectOfType<AudioListener>().transform;
-            playerT = FindObjectOfType<Player>().transform;
+            if(FindObjectOfType<Player>() != null)
+            {
+                playerT = FindObjectOfType<Player>().transform;
+
+            }
 
             //masterVolumePercent = PlayerPrefs.GetFloat("master vol", masterVolumePercent);
             //musicVolumePercent = PlayerPrefs.GetFloat("music vol", musicVolumePercent);
