@@ -92,6 +92,7 @@ Assets/Scripts/Gun.cs
 Assets/Scripts/GunController.cs
 Assets/Scripts/ITakeDamage.cs
 Assets/Scripts/Killable.cs
+Assets/Scripts/Menu.cs
 Assets/Scripts/MusicManager.cs
 Assets/Scripts/Objective.cs
 Assets/Scripts/Opponent.cs
