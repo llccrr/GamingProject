@@ -3,20 +3,29 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Menu : MonoBehaviour {
+public class Menu : MonoBehaviour
+{
 
     public GameObject mainMenuHolder;
     public GameObject optionsMenuHolder;
 
     public Slider[] volumeSliders;
     public Toggle[] resolutionCheckBoxes;
+    public Toggle fullscreenToggle;
     public int[] screenWidths;
     int activeScreenResIndex;
 
     void Start()
     {
         activeScreenResIndex = PlayerPrefs.GetInt("screen res index");
-        bool isFullScreen = PlayerPrefs.GetInt("fullscreen") == 1? true :false;
+        bool isFullScreen = PlayerPrefs.GetInt("fullscreen") == 1 ? true : false;
+
+        for (int i = 0; i < resolutionCheckBoxes.Length; i++)
+        {
+            resolutionCheckBoxes[i].isOn = i == activeScreenResIndex;
+        }
+
+        fullscreenToggle.isOn = isFullScreen;
     }
 
     public void Play()
@@ -43,7 +52,7 @@ public class Menu : MonoBehaviour {
 
     public void SetScreenReslution(int i)
     {
-        if(resolutionCheckBoxes[i].isOn)
+        if (resolutionCheckBoxes[i].isOn)
         {
             activeScreenResIndex = i;
             float aspectRatio = 16 / 9f;
@@ -59,7 +68,7 @@ public class Menu : MonoBehaviour {
         {
             resolutionCheckBoxes[i].interactable = !isFullScreen;
         }
-        if(isFullScreen)
+        if (isFullScreen)
         {
             Resolution[] allResolutions = Screen.resolutions;
             Resolution maxRes = allResolutions[allResolutions.Length - 1];
