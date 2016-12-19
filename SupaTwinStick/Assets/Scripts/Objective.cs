@@ -30,7 +30,8 @@ public class Objective : MonoBehaviour {
 				Activation ();
 				OnActivated ();
 				activated = true;
-			}
+                AudioManager.instance.PlaySound("Torched Touch", transform.position);
+            }
 		}
 	}
 

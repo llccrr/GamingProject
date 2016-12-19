@@ -43,4 +43,10 @@ public class Player : Killable {
 			gunController.Shoot ();
 		}
     }
+
+    public override void Die()
+    {
+        AudioManager.instance.PlaySound("Player Death", transform.position);
+        base.Die();
+    }
 }
