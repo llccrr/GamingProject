@@ -50,8 +50,10 @@ public class Opponent : Killable {
     }
     public override void TakeShell(float damageShell, Vector3 shellPoint, Vector3 shellDirection)
     {
-        if(damageShell>=lifePoints)
+        AudioManager.instance.PlaySound("Impact", transform.position);
+        if (damageShell>=lifePoints)
         {
+            AudioManager.instance.PlaySound("Enemy Death", transform.position);
             Destroy(Instantiate(deathEffect.gameObject, shellPoint, Quaternion.FromToRotation(Vector3.forward, shellDirection)) as GameObject, deathEffect.startLifetime);
         }
         base.TakeShell(damageShell, shellPoint, shellDirection);
@@ -73,6 +75,7 @@ public class Opponent : Killable {
                 if (sqrDistance < Mathf.Pow(attackDistance + playerCollisionRadius + opponentCollisionRadius, 2))
                 {
                     timeUntilNextAttack = Time.time + attackRate;
+                    AudioManager.instance.PlaySound("Enemy Attack", transform.position);
                     StartCoroutine(Attack());
                 }
             }

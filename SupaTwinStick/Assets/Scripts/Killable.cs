@@ -27,12 +27,15 @@ public class Killable : MonoBehaviour, ITakeDamage {
             Die();
         }
     }
-	public void Die (){
-		killed = true;
-        if(OnKilled != null)
+
+    [ContextMenu("Self Destruct")]
+    public virtual void Die()
+    {
+        killed = true;
+        if (OnKilled != null)
         {
             OnKilled();
         }
-		GameObject.Destroy (gameObject);
-	}
+        GameObject.Destroy(gameObject);
+    }
 }
