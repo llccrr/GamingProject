@@ -63,12 +63,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\Bullet.cs" />
     <Compile Include="Assets\Scripts\DisplayFPS.cs" />
+    <Compile Include="Assets\Scripts\FlashPowa.cs" />
     <Compile Include="Assets\Scripts\GameUI.cs" />
     <Compile Include="Assets\Scripts\Gun.cs" />
     <Compile Include="Assets\Scripts\GunController.cs" />
     <Compile Include="Assets\Scripts\ITakeDamage.cs" />
     <Compile Include="Assets\Scripts\Killable.cs" />
+    <Compile Include="Assets\Scripts\MusicManager.cs" />
     <Compile Include="Assets\Scripts\Objective.cs" />
     <Compile Include="Assets\Scripts\Opponent.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
