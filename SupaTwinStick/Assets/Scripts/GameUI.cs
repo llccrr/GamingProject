@@ -11,13 +11,15 @@ public class GameUI : MonoBehaviour
 	public Text floorObjectives;
 	public RectTransform floorBanner;
     public Text scoreUI;
+    public RectTransform lifeBar;
 
 	Spawner spawn;
-
+    Player player;
 	// Use this for initialization
 	void Start () 
 	{
-		FindObjectOfType<Player> ().OnKilled += OnPlayerKilled;
+        player = FindObjectOfType<Player>();
+		player.OnKilled += OnPlayerKilled;
 	}
 	
 	void OnPlayerKilled ()
@@ -35,6 +37,12 @@ public class GameUI : MonoBehaviour
     void Update()
     {
         scoreUI.text = ScoreManager.score.ToString("D6");
+        if(player != null)
+        {
+            float lifePercent = player.lifePoints / player.beginningLifePoints;
+            lifeBar.localScale = new Vector3(lifePercent, 1, 1);
+        }
+       
     }
 	void newLevelTop(int floorNumber)
 	{
