@@ -12,6 +12,7 @@ public class ScoreManager : MonoBehaviour {
     {
         Opponent.OnDeathStatic += OnOpponentDeath;
         FindObjectOfType<Player>().OnKilled += OnPlayerDeath;
+        score = 0;
     }
 
     void OnOpponentDeath()

@@ -93,7 +93,10 @@ public class GameUI : MonoBehaviour
 
 	public void StartGame()
 	{
-		SceneManager.LoadScene("SupaScene");
+        SceneManager.LoadScene("SupaScene");
 	}
-
+    public void ReturnMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
 }
