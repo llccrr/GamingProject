@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour {
     public float forceMin;
     public float forceMax;
 
-    float lifeTime = 4;
+    float lifeTime = 1;
     float fadeTime = 2;
 	// Use this for initialization
 	void Start () {
