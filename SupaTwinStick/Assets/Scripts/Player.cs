@@ -7,6 +7,8 @@ public class Player : Killable {
 
     public float moveSpeed = 5;
 
+	public Transform crossHairs;
+
     PlayerController myPlayerController;
     Camera viewCamera;
 	GunController gunController;
@@ -29,12 +31,13 @@ public class Player : Killable {
 
         /* Manage the camera to look at the mouse cursor */
         Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
-        Plane myPlane = new Plane(Vector3.up, Vector3.zero);
+		Plane myPlane = new Plane(Vector3.up, Vector3.up * gunController.ShootingHeight);
         float rayDistance;
 
         if(myPlane.Raycast(ray, out rayDistance))
         {
-            Vector3 point = ray.GetPoint(rayDistance);
+			Vector3 point = ray.GetPoint(rayDistance);
+			crossHairs.position = point;
             myPlayerController.LookAt(point);
         }
 
@@ -47,6 +50,7 @@ public class Player : Killable {
     public override void Die()
     {
         AudioManager.instance.PlaySound("Player Death", transform.position);
+		Cursor.visible = true;
         base.Die();
     }
 }
