@@ -4,7 +4,7 @@ using System.Collections;
 public class Killable : MonoBehaviour, ITakeDamage {
 
 	public float beginningLifePoints;
-	protected float lifePoints;
+	public float lifePoints{get; protected set;}
 	protected string status;
 	protected bool killed;
 

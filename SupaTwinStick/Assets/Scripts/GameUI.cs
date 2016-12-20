@@ -10,13 +10,16 @@ public class GameUI : MonoBehaviour
 	public Text floorLevel;
 	public Text floorObjectives;
 	public RectTransform floorBanner;
+    public Text scoreUI;
+    public RectTransform lifeBar;
 
 	Spawner spawn;
-
+    Player player;
 	// Use this for initialization
 	void Start () 
 	{
-		FindObjectOfType<Player> ().OnKilled += OnPlayerKilled;
+        player = FindObjectOfType<Player>();
+		player.OnKilled += OnPlayerKilled;
 	}
 	
 	void OnPlayerKilled ()
@@ -31,6 +34,16 @@ public class GameUI : MonoBehaviour
 		spawn.newLevelTop += newLevelTop;
 	}
 
+    void Update()
+    {
+        scoreUI.text = ScoreManager.score.ToString("D6");
+        if(player != null)
+        {
+            float lifePercent = player.lifePoints / player.beginningLifePoints;
+            lifeBar.localScale = new Vector3(lifePercent, 1, 1);
+        }
+       
+    }
 	void newLevelTop(int floorNumber)
 	{
 		string[] numbersStrings = { "First", "Second", "Third", "Fourth", "Fith", "Sixth", "Seventh", "Eighth", "Nineth", "Tenth" };
@@ -80,7 +93,10 @@ public class GameUI : MonoBehaviour
 
 	public void StartGame()
 	{
-		SceneManager.LoadScene("SupaScene");
+        SceneManager.LoadScene("SupaScene");
 	}
-
+    public void ReturnMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
 }
