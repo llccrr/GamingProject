@@ -10,6 +10,7 @@ public class GameUI : MonoBehaviour
 	public Text floorLevel;
 	public Text floorObjectives;
 	public RectTransform floorBanner;
+    public Text scoreUI;
 
 	Spawner spawn;
 
@@ -31,6 +32,10 @@ public class GameUI : MonoBehaviour
 		spawn.newLevelTop += newLevelTop;
 	}
 
+    void Update()
+    {
+        scoreUI.text = ScoreManager.score.ToString("D6");
+    }
 	void newLevelTop(int floorNumber)
 	{
 		string[] numbersStrings = { "First", "Second", "Third", "Fourth", "Fith", "Sixth", "Seventh", "Eighth", "Nineth", "Tenth" };

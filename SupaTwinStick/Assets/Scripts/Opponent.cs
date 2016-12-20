@@ -7,7 +7,7 @@ public class Opponent : Killable {
     public enum State {Freezing, Chasing, Attacking};
     State currentState;
     public ParticleSystem deathEffect;
-
+    public static event System.Action OnDeathStatic;
 	NavMeshAgent navSys;
 	Transform destination;
     Killable target;
@@ -53,6 +53,10 @@ public class Opponent : Killable {
         AudioManager.instance.PlaySound("Impact", transform.position);
         if (damageShell>=lifePoints)
         {
+            if(OnDeathStatic != null)
+            {
+                OnDeathStatic();
+            }
             AudioManager.instance.PlaySound("Enemy Death", transform.position);
             Destroy(Instantiate(deathEffect.gameObject, shellPoint, Quaternion.FromToRotation(Vector3.forward, shellDirection)) as GameObject, deathEffect.startLifetime);
         }
