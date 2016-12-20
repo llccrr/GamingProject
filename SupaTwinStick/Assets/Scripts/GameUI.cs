@@ -7,6 +7,11 @@ public class GameUI : MonoBehaviour
 {
 	public Image maskScreen;
 	public GameObject endGameUI;
+	public Text floorLevel;
+	public Text floorObjectives;
+	public RectTransform floorBanner;
+
+	Spawner spawn;
 
 	// Use this for initialization
 	void Start () 
@@ -18,6 +23,46 @@ public class GameUI : MonoBehaviour
 	{
 		StartCoroutine (Fading (Color.clear, Color.black, 2));
 		endGameUI.SetActive (true);
+	}
+
+	void Awake()
+	{
+		spawn = FindObjectOfType<Spawner>();
+		spawn.newLevelTop += newLevelTop;
+	}
+
+	void newLevelTop(int floorNumber)
+	{
+		string[] numbersStrings = { "First", "Second", "Third", "Fourth", "Fith", "Sixth", "Seventh", "Eighth", "Nineth", "Tenth" };
+		floorLevel.text = " - " + numbersStrings [floorNumber - 1] + "Floor  -";
+		floorObjectives.text = "Activate the objectives";
+
+		StartCoroutine (AnimateFloorBanner ());
+	}
+
+	IEnumerator AnimateFloorBanner()
+	{
+
+		float delay = 1.5f;
+		float moveSpeed = 1.5f;
+		float percentage = 0;
+		int direction = 1;
+
+		float delayTime = Time.time + delay + 1 / moveSpeed;
+		while (percentage >= 0) 
+		{
+			percentage += Time.deltaTime * moveSpeed * direction;
+
+			if (percentage >= 1) {
+				percentage = 1;
+				if (Time.time > delayTime) {
+					direction = -direction;
+				}
+			}
+
+			floorBanner.anchoredPosition = Vector2.up * Mathf.Lerp (-430, -200, percentage);
+			yield return null;
+		}
 	}
 
 	IEnumerator Fading(Color initialColor, Color finalColor, float timer)

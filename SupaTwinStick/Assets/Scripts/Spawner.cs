@@ -139,6 +139,10 @@ public class Spawner : MonoBehaviour
 		objectiveCounter -= 1;
 	}
 
+	public int getObjectifCounter(){
+		return objectiveCounter;
+	}
+
     [System.Serializable]
     public class Level
     {
