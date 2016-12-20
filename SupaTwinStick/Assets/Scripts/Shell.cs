@@ -7,6 +7,7 @@ public class Shell : MonoBehaviour {
 	float damageShell = 1;
 	float currentSpeed = 10;
 	public LayerMask collisionMask;
+    public Color trailColor;
     float autoDestruction = 4;
     float safetyWidth = .1f;
 
@@ -18,6 +19,8 @@ public class Shell : MonoBehaviour {
         {
             OnCollision(initCollisions[0], transform.position);
         }
+
+        GetComponent<TrailRenderer>().material.SetColor("_TintColor", trailColor);
     }
 	public void ResetSpeed(float newSpeed){
 		currentSpeed = newSpeed;

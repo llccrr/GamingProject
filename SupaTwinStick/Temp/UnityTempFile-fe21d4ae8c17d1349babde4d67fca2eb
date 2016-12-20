@@ -1,21 +1,11 @@
 -debug
 -target:library
 -nowarn:0169
--out:Temp/Assembly-CSharp-Editor.dll
+-out:Temp/Assembly-CSharp.dll
 -r:"C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll"
--r:"C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll"
--r:Library/ScriptAssemblies/Assembly-CSharp.dll
--r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll"
--r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/EditorTestsRunner/Editor/nunit.framework.dll"
--r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/EditorTestsRunner/Editor/UnityEditor.EditorTestsRunner.dll"
 -r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
--r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll"
 -r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll"
--r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll"
--r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll"
--r:"C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll"
--r:"C:/Program Files/Unity/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll"
--r:"C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/2015/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll"
+-r:"C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll"
 -define:UNITY_5_3_OR_NEWER
 -define:UNITY_5_4_OR_NEWER
 -define:UNITY_5_4_1
@@ -93,6 +83,28 @@
 -define:UNITY_EDITOR_WIN
 -define:UNITY_TEAM_LICENSE
 -define:ENABLE_VSTU
-Assets/Editor/MapEditor.cs
--r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\2.0\System.Runtime.Serialization.dll"
--r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\2.0\System.Xml.Linq.dll"
+Assets/Scripts/AudioManager.cs
+Assets/Scripts/Bullet.cs
+Assets/Scripts/CameraController.cs
+Assets/Scripts/CrossHair.cs
+Assets/Scripts/DisplayFPS.cs
+Assets/Scripts/FlashPowa.cs
+Assets/Scripts/GameUI.cs
+Assets/Scripts/Gun.cs
+Assets/Scripts/GunController.cs
+Assets/Scripts/ITakeDamage.cs
+Assets/Scripts/Killable.cs
+Assets/Scripts/Menu.cs
+Assets/Scripts/MusicManager.cs
+Assets/Scripts/Objective.cs
+Assets/Scripts/Opponent.cs
+Assets/Scripts/Player.cs
+Assets/Scripts/PlayerController.cs
+Assets/Scripts/ProceduralMapGenerator.cs
+Assets/Scripts/ScoreManager.cs
+Assets/Scripts/Shell.cs
+Assets/Scripts/SoundLibrary.cs
+Assets/Scripts/Spawner.cs
+Assets/Scripts/UtilityScript.cs
+-r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Runtime.Serialization.dll"
+-r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Xml.Linq.dll"
